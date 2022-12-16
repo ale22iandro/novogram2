@@ -1,0 +1,9 @@
+<span class="user">
+  <span>
+    <% if request.path == user_path(user) %>
+     <%= t('comment.wrote') %> <%= user.name %>
+    <% else %>
+      <%= t('comment.wrote') %> <%= link_to user.name, user_path(user) %>
+    <% end %>
+  </span>
+</span>

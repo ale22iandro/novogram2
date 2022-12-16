@@ -1,0 +1,14 @@
+<%= form_for [@post, comment] do |f| %>
+  <div class="form-group">
+    <%= f.text_area :body,  class: 'form-control', placeholder: t('comment.size')%>
+  </div>
+  <% unless user_signed_in? %>
+    <div class="form-group">
+      <%= f.label :username %>
+      <%= f.text_field :username, class: 'form-control' %>
+    </div>
+  <% end %>
+  <div class="actions">
+    <%= f.submit I18n.t('post.comment.send'), class: 'btn btn-primary' %>
+  </div>
+<% end %>

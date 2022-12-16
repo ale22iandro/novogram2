@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Novogram</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+
+<body>
+<!--Navigation Bar-->
+
+<nav class="navbar navbar-light bg-light d-flex">
+  <div class="container">
+    <div class="logo">
+      <a class="navbar-brand"
+         <%= link_to fa_icon('home'), home_index_path %>
+         <%= fa_stacked_icon "camera inverse", base: "circle" %>
+         Novogram
+      </a>
+    </div>
+
+    <div class="m-auto">
+      <%= form_with url: search_path, method: :get, local: true, class: 'form-inline search-form' do |form| %>
+        <%= form.text_field :query, value: params[:query], class: 'form-control mr-sm-2', placeholder: '#search' %>
+      <% end %>
+    </div>
+    <div class="locale">
+      <% I18n.available_locales.each do |locale| %>
+        <%= link_to locale, root_path(locale: locale),
+                    class: 'btn btn-secondary btn-sm' %>
+      <% end %>
+    </div>
+    <div class="user-section">
+      <%= link_to fa_icon('heart'), search_favorites_path, title: 'Favorite Posts' %>
+      <% if user_signed_in? %>
+        <%= link_to fa_icon('user'), user_path(current_user), title: 'User Profile' %>
+        <%= link_to fa_icon('sign-out'), destroy_user_session_path, method: :delete, title: 'Sign Out' %>
+
+      <% else %>
+        <%= link_to fa_icon('sign-in'), new_user_session_path, title: 'Login / Register' %>
+      <% end %>
+    </div>
+  </div>
+</nav>
+
+<!--Main content-->
+<main class="container" style="min-height: 500px;">
+  <%= yield %>
+
+</main>
+
+<!--Footer-->
+<footer class="container footer">
+  <nav class="navbar d-flex">
+    <ul>
+      <li><%= link_to 'ABOUT US', "/about.html.erb" %></li>
+      <% if current_user.present? %>
+        <li><%= link_to 'PROFILES', users_path %></li>
+      <% else %>
+        <li><%= link_to 'PROFILES', new_user_registration_path %></li>
+      <% end %>
+      <li>LANGUAGE</li>
+    </ul>
+    <p> © 2022 NOVOGRAM </p>
+  </nav>
+</footer>
+</body>
+</html>

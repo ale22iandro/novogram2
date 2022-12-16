@@ -1,0 +1,58 @@
+<div class="post-show row">
+
+  <div class="col-md-8">
+    <%= image_tag @post.image, class: 'image' %>
+    <div class="delete">
+      <% if current_user.posts.exists?(@post.id) %>
+        <%= link_to fa_icon('trash'), post_path(@post), method: :delete, data: {confirm: 'Are you sure?'}, title: 'Delete post' %>
+        <%= link_to fa_icon('edit'), edit_post_path(@post), data: { confirm: "Are you sure?"}, title: 'Edit description' %>
+      <% end %>
+      <% if user_signed_in? %>
+
+        <% if @post.liked?(current_user) %>
+          <%= link_to fa_icon('thumbs-down'), like_path(@post), method: :put, title: 'Dislike' %>
+        <% else %>
+          <%= link_to fa_icon('heart'), like_path(@post), method: :put, title: "Like" %>
+        <% end %>
+      <% end %>
+
+    </div>
+  </div>
+  <div class="col-md-4">
+
+    <div class="user">
+      <div class="avatar">
+        <% if @post.user.avatar.attached? %>
+          <%= link_to user_path(@post.user) do %>
+            <%= image_tag @post.user.avatar %>
+          <% end %>
+        <% end %>
+
+      </div>
+      <%= link_to @post.user.username, user_path(@post.user), class: 'username' %>
+    </div>
+    <div class="description">
+
+      <% @post.description.to_s.split(' ').each do |word| %>
+        <% if word.start_with?('#') %>
+          <%= link_to word, search_path(query: word) %>
+        <% else %>
+          <%= word %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="comment-container">
+      <div>
+          <div class="post-comments buffer-top">
+            <div class="buffer-both">
+              <%= render partial: 'comments/comment',
+                         collection: @post.comments.except(@new_comment) %>
+            </div>
+          </div>
+      </div>
+    </div>
+    <%= render partial: 'comments/form',
+               locals: {comment: @new_comment || @post.comments.build} %>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="user-profile">
+  <div class="profile row">
+    <div class="col-md-4 avatar">
+      <div class="wrapper">
+        <% if @user.avatar.attached? %>
+          <%= image_tag @user.avatar %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <div class="col-md-8 basic-info">
+      <%#= link_to fa_icon('send'), chat_path %>
+
+      <div class="user-wrapper">
+        <% if @user.id == current_user.id %>
+          <h2 class="username"><%= current_user.username %></h2>
+          <a class="edit-profile">
+            <a class="edit-profile" href="<%= edit_user_path(current_user) %>">
+              <button><%= t('user.Edit_profile') %></button>
+            </a>
+        <% else %>
+          <a class="edit-profile" href="">
+            <% if current_user.subscribed?(@user) %>
+              <%= link_to t('Unsubscribe'), unsubscribe_path(@user), method: :delete, class: 'btn btn-danger' %>
+            <% else %>
+              <%= link_to t('Subscribe'), subscribe_path(@user), method: :put, class: 'btn btn-primary' %>
+            <% end %>
+        <% end %>
+        </a>
+      </div>
+      <ul class="posts">
+        <li><span><%= @posts.count %></span> <%= t('user.posts') %></li>
+        <li><span><%= @user.followers_count %></span> <%= t('user.followers') %></li>
+        <li><span><%= @user.followed_count %></span> <%= t('user.following') %></li>
+        <% if current_user == @user %>
+          <li><span><%= @user.comments.count %></span> <%= link_to t('user.comments'), comments_path %></li>
+        <% else %>
+          <li><span><%= @user.comments.count %></span> <%= t('user.comments') %></li>
+        <% end %>
+      </ul>
+
+      <h2 class="name"><%= current_user.name %></h2>
+      <div>С нами с
+        <%= l @user.created_at, format: :short %>
+      </div>
+      <% if @user.comments.present? %>
+        <div> Last comment: <%= @user.comments.last.body %>
+          <%= link_to fa_icon('arrow-right'), post_path(@user.comments.last.post_id) %>
+        </div>
+      <% end %>
+      <%= link_to current_user.website, current_user.website, class: 'website' %>
+    </div>
+  </div>
+</div>
+<div class="user-tabs">
+  <a class="tab active" href="">
+    <i class="fa fa-th"></i>
+    POSTS
+  </a>
+  <a class="tab" href="">
+    <i class="fa fa-bookmark"></i>
+    SAVED
+  </a>
+  <a class="tab" href="">
+    <i class="fa fa-tag"></i>
+    TAGGED
+  </a>
+</div>
+<div class="user-images">
+  <% @posts.each do |post| %>
+    <div class="wrapper">
+      <%= link_to post_path(post) do %>
+        <%= image_tag post.image %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

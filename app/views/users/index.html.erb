@@ -1,0 +1,10 @@
+<h1>Список пользователей:</h1>
+<ul class="list-group list-group-numbered">
+  <% @users.each do |user| %>
+    <li class="list-group-item">
+      <%= user.name %>
+      <%= user.email %>
+      <%= link_to fa_icon('eye'), user_path(user) %>
+    </li>
+  <% end %>
+</ul>

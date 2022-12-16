@@ -1,0 +1,13 @@
+<% if user_signed_in? %>
+  <div class="form-upload mb-3">
+    <%= form_with model: @post do |f| %>
+      <div class="form-group">
+        <%= f.label t('post.edit.edit-description') %>
+        <%= f.text_field :description %>
+      </div>
+      <div class="text-center">
+        <%= f.submit t('post.edit.edit-description'), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+<% end %>
+</div>

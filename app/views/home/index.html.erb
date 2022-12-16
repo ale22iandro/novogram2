@@ -1,0 +1,60 @@
+<% if user_signed_in? %>
+  <div class="form-upload mb-3">
+    <%= form_with model: Post.new do |f| %>
+      <div class="form-group">
+        <%= f.text_field :description %>
+      </div>
+      <div class="form-group">
+        <%= f.file_field :image %>
+      </div>
+      <div class="form-group">
+        <%= f.text_field :user_id, value: current_user.id, class: 'd-none' %>
+      </div>
+      <br>
+      <div class="text-center">
+        <%= f.submit t('home.create_post'), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+<% end %>
+</div>
+
+<%== pagy_bootstrap_nav @pagy %>
+
+<div class="posts">
+  <% @posts.each do |post| %>
+    <section class="post">
+      <div class="user">
+        <div class="avatar">
+          <% if post.user.avatar.attached? %>
+            <%= link_to user_path(post.user) do %>
+              <%= image_tag post.user.avatar %>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="username">
+          <%= link_to post.user.username, user_path(post.user), class: 'username' %>
+        </div>
+      </div>
+<% if user_signed_in? %>
+      <%= link_to (image_tag post.image, class: 'main-image'), post_path(post) %>
+        <% else %>
+        <%= link_to (image_tag post.image, class: 'main-image'), new_user_session_path %>
+        <% end %>
+      <div class="description">
+        <% post.description.to_s.split(' ').each do |word| %>
+          <% if word.start_with?('#') %>
+            <%= link_to word, search_path(query: word) %>
+          <% else %>
+            <%= word %>
+          <% end %>
+        <% end %>
+        <div style="text-align: right">
+         <%= t('home.comments') %> <%= post.comments.count %>
+        </div>
+      </div>
+    </section>
+  <% end %>
+
+</div>
+<%== pagy_bootstrap_nav @pagy %>
