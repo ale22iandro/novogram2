@@ -234,3 +234,6 @@ fi:
     wrote: "wrote"
   user:
     comments: "Commenti"
+  users:
+   index: 
+    show: "List of Users:"

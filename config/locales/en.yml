@@ -236,3 +236,6 @@ en:
     wrote: "written by"
   user:
     comments: "Comments"
+  users:
+    index: 
+      show: "List of Users:"
